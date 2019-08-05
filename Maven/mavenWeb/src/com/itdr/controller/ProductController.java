@@ -19,7 +19,7 @@ import java.io.IOException;
  * @date 2019-08-03 15:46
  */
 @WebServlet(name = "ProductController")
-public class ProductController extends HttpServlet {
+public class  ProductController extends HttpServlet {
     private ProductService ps=new ProductService();
     private UserService uc  =new UserService();
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -34,11 +34,8 @@ public class ProductController extends HttpServlet {
 
         //判断需要什么样的请求
         switch (path) {
-            case "login":
-                rs = loginDo(request);
-                break;
             case "list":
-                rs=listDo(request);
+                rs=selectAll(request);
                 break;
 
             //返回相应数据
@@ -47,7 +44,7 @@ public class ProductController extends HttpServlet {
     }
 
     //获取所有用户的请求
-    private ResponseCode listDo(HttpServletRequest request){
+    private ResponseCode selectAll (HttpServletRequest request){
         ResponseCode rs=new ResponseCode();
         HttpSession session=request.getSession();
         Users user = (Users) session.getAttribute("user");
@@ -73,18 +70,7 @@ public class ProductController extends HttpServlet {
         return rs;
     }
 
-    //用户登录的请求
-    private ResponseCode loginDo(HttpServletRequest request){
-        //获取参数
-        String username=request.getParameter("username");
-        String password=request.getParameter("password");
-        ResponseCode rs = uc.selectOne(username,password);
-            //获取Session对象
-            HttpSession session=request.getSession();
-            session.setAttribute("user",rs.getData());
-            //调用业务处理的业务
-            return  rs;
-        }
+
     }
 
 

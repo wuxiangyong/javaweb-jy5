@@ -22,13 +22,10 @@ public class ProductService {
             pageNum="1";
 
         }
-
+        ResponseCode rs=null;
         //如果集合元素是空呢
         List<Products> li =pd.selectAll(pageSize,pageNum);
-        ResponseCode rs=new ResponseCode();
-        rs.setStatus(0);
-        rs.setData(li);
-
-        return rs ;
+           rs=ResponseCode.successRs(li);
+           return rs ;
     }
 }

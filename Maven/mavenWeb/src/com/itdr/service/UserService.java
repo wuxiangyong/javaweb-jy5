@@ -37,8 +37,7 @@ import java.util.List;
       public ResponseCode selectOne(String username, String password) {
           ResponseCode rs= new ResponseCode();
             if (username==null ||username.equals("")||password==null||password.equals("")){
-               rs.setStatus(1);
-               rs.setMsg("账号或密码错误");
+               rs=ResponseCode.defeatedRs(1,"账号或密码不能为空");
                 return  rs;
 
           }
@@ -46,19 +45,18 @@ import java.util.List;
             Users u=ud. selectOne(username,password);
              //如果用户不存在
             if (u==null){
-               rs.setStatus(1);
-               rs.setMsg("账号或者密码错误");
+               rs=ResponseCode.defeatedRs(1,"账号或者密码错误");
                return  rs;
            }
 
         //用户权限
             if (u.getType()!=1){
-              rs.setStatus(2);
-              rs.setMsg("没有操作权限");
+              rs=ResponseCode.defeatedRs(2,"没有操作权限");
               return rs;
           }
-           rs.setStatus(0);
-           rs.setData(u);
+//           rs.setStatus(0);
+//           rs.setData(u);
+           rs=ResponseCode.successRs(u);
             return rs;
     }
 
@@ -67,8 +65,7 @@ import java.util.List;
         ResponseCode rs = new ResponseCode();
 
         if (uids == null || uids.equals("")){
-            rs.setStatus(Const.USER_PARAMETER_CODE);
-        rs.setMsg(Const.USER_PARAMETER_MSG);
+        rs=ResponseCode.defeatedRs(Const.USER_PARAMETER_CODE,Const.USER_PARAMETER_MSG);
         return rs;
     }
 
@@ -78,8 +75,7 @@ import java.util.List;
 
            uid =Integer.parseInt(uids);
         }catch(Exception e){
-            rs.setStatus(105);
-            rs.setMsg("输入的参数非法");
+            rs=ResponseCode.defeatedRs(105,"输入的参数非法");
             return  rs;
         }
 
@@ -88,27 +84,23 @@ import java.util.List;
 
         //如果用户不存在
         if (u==null){
-            rs.setStatus(Const.USER_NO_CODE);
-            rs.setMsg(Const.USER_NO_MSG);
+            rs=ResponseCode.defeatedRs(Const.USER_NO_CODE,Const.USER_NO_MSG);
             return  rs;
         }
 
         //用户禁用的情况
         if (u.getStats()==1){
-            rs.setStatus(Const.USER_DISABLE_CODE);
-            rs.setMsg(Const.USER_DISABLE_MSG);
+            rs=ResponseCode.defeatedRs(Const.USER_DISABLE_CODE,Const.USER_DISABLE_MSG);
             return rs;
         }
 
-      //禁止用户
+      ///禁止用户
        int  row =ud.updateByUid(uid);
         if(row<=0){
-            rs.setStatus(106);
-            rs.setMsg("用户禁用更新失败");
+            rs=ResponseCode.defeatedRs(106,"用户禁用更新失败");
             return rs;
     }
-           rs.setStatus(0);
-           rs.setData(row);
+           rs=ResponseCode.successRs(ud);
             return rs;
     }
 
